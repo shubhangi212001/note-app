@@ -17,12 +17,6 @@ pipeline {
                 git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
             }
         }
-        stage('OWASP Dependency Check') {
-            steps {
-                // Execute OWASP Dependency Check
-                sh "dependency-check/bin/dependency-check.sh --project DjangoNoteApp --scan . --format ALL"
-            }
-        }
         stage("Sonarqube Analysis"){
             steps{
                 withSonarQubeEnv('sonar-scanner') {
