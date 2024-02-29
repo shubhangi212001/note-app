@@ -14,7 +14,7 @@ pipeline {
         }
         stage("Code"){
             steps{
-                git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
+                git url: "https://github.com/shubhangi212001/note-app.git", branch: "master"
             }
         }
         stage("Sonarqube Analysis"){
