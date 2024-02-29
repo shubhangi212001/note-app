@@ -17,6 +17,14 @@ pipeline {
                 git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
             }
         }
+        stage('Dependency Vulnerability Scan') {
+            steps {
+                script {
+                    def dependencyCheckHome = tool 'dependency-check'
+                    sh "${dependencyCheckHome}/bin/dependency-check.sh --scan . --format ALL --project 'Django Note App' --out ."
+                }
+            }
+        }
         stage("Sonarqube Analysis"){
             steps{
                 withSonarQubeEnv('sonar-scanner') {
@@ -25,6 +33,13 @@ pipeline {
                     '''
                 }
             }
+        }
+        stage("Quality Gate") {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-scanner' 
+                }
+            } 
         }
         stage('Build') {
             steps {
@@ -48,6 +63,19 @@ pipeline {
                 sh "docker-compose down && docker-compose up -d"
             }
         }
+    }
+        stage('OWASP DP SCAN') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'owasp-dp-check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+    
+        stage('TRIVY FS SCAN') {
+            steps {
+                sh "trivy fs . > trivyfs.txt"
+            }
+        } 
     }
     post {
      always {
