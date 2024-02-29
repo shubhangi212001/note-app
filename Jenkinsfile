@@ -17,6 +17,17 @@ pipeline {
                 git url: "https://github.com/shubhangi212001/note-app.git", branch: "master"
             }
         }
+        stage('OWASP DP SCAN') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'dp-check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage('TRIVY FS SCAN') {
+            steps {
+                sh "trivy fs . > trivyfs.txt"
+            }
+        } 
         stage("Sonarqube Analysis"){
             steps{
                 withSonarQubeEnv('sonar-scanner') {
@@ -55,17 +66,6 @@ pipeline {
                 sh "docker-compose down && docker-compose up -d"
             }
         }
-        stage('OWASP DP SCAN') {
-            steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'dp-check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
-        stage('TRIVY FS SCAN') {
-            steps {
-                sh "trivy fs . > trivyfs.txt"
-            }
-        } 
     }
     post {
      always {
