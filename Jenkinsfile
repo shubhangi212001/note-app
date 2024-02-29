@@ -17,12 +17,10 @@ pipeline {
                 git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
             }
         }
-        stage('Dependency Vulnerability Scan') {
+        stage('OWASP Dependency Check') {
             steps {
-                script {
-                    def dependencyCheckHome = tool 'dependency-check'
-                    sh "${dependencyCheckHome}/bin/dependency-check.sh --scan . --format ALL --project 'Django Note App' --out ."
-                }
+                // Execute OWASP Dependency Check
+                sh "dependency-check/bin/dependency-check.sh --project DjangoNoteApp --scan . --format ALL"
             }
         }
         stage("Sonarqube Analysis"){
