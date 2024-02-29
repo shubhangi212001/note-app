@@ -1,11 +1,29 @@
 pipeline {
     agent any
-    
+     tools{
+        jdk 'jdk'
+    }
+    environment {
+        SCANNER_HOME=tool 'sonar-server'
+    }
     stages {
-        stage('code') {
-            steps {
-                echo 'Cloning the code'
-                git url: "https://github.com/shubhangi212001/note-app.git", branch: "main"
+        stage('Workspace Cleaning'){
+            steps{
+                cleanWs()
+            }
+        }
+        stage("Code"){
+            steps{
+                git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
+            }
+        }
+        stage("Sonarqube Analysis"){
+            steps{
+                withSonarQubeEnv('sonar-scanner') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=django-note-app \
+                    -Dsonar.projectKey=django-note-app \
+                    '''
+                }
             }
         }
         stage('Build') {
