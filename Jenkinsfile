@@ -18,11 +18,17 @@ pipeline {
             }
         }
        stage('OWASP DP SCAN') {
-            steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'dp-check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+           steps {
+               dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'dp-check'
+               dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+               // Transform XML report to HTML
+               sh 'dependency-check --project "django-app" --scan ./ --format HTML --output-format HTML -o dependency-check-report.html --disableYarnAudit --disableNodeAudit'
+
+               // Move HTML report to desired location
+               sh 'mv dependency-check-report.html /path/to/html/report/'
             }
-        }
+         }
+      }
         stage('TRIVY FS SCAN') {
             steps {
                 sh "trivy fs . > trivyfs.txt"
