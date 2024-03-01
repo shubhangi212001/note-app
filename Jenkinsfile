@@ -20,7 +20,7 @@ pipeline {
        stage('OWASP DP SCAN') {
             steps {
                 dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'dp-check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.html'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml', xslt: 'dependency-check-report.xsl', reportOutputDirectory: '/path/to/html/report'
             }
         }
         stage('TRIVY FS SCAN') {
