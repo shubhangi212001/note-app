@@ -17,17 +17,15 @@ pipeline {
                 git url: "https://github.com/shubhangi212001/note-app.git", branch: "main"
             }
         }
-        stage("Sonarqube Analysis") {
+        stage('OWASP DP SCAN') {
             steps {
-                withSonarQubeEnv('sonar-scanner') {
-                    sh '''
-                    $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=django-note-app \
-                    -Dsonar.projectKey=django-note-app
-                    '''
-                }
-            }
-        }
+            // Scan dependencies and disable unnecessary audits
+            dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit, odcInstallation: 'dp-check' --format HTML'
 
+            // Publish the generated HTML report
+            dependencyCheckPublisher pattern: '**/dependency-check-report.html'
+        }
+     }
         stage('TRIVY FS SCAN') {
             steps {
                 sh "trivy fs . > trivyfs.txt"
