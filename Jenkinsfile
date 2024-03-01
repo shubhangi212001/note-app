@@ -17,15 +17,12 @@ pipeline {
                 git url: "https://github.com/shubhangi212001/note-app.git", branch: "main"
             }
         }
-        stage('OWASP DP SCAN') {
+       stage('OWASP DP SCAN') {
             steps {
-            // Scan dependencies and disable unnecessary audits
-            dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --format HTML'
-
-            // Publish the generated HTML report
-            dependencyCheckPublisher pattern: '**/dependency-check-report.html'
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'dp-check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
         }
-     }
         stage('TRIVY FS SCAN') {
             steps {
                 sh "trivy fs . > trivyfs.txt"
