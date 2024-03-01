@@ -20,7 +20,7 @@ pipeline {
         stage('OWASP DP SCAN') {
             steps {
             // Scan dependencies and disable unnecessary audits
-            dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit, odcInstallation: 'dp-check' --format HTML'
+            dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --format HTML'
 
             // Publish the generated HTML report
             dependencyCheckPublisher pattern: '**/dependency-check-report.html'
