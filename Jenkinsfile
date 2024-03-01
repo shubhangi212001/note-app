@@ -19,7 +19,7 @@ pipeline {
         }
         stage('OWASP DP SCAN') {
             steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --format HTML --output /path/to/html/report', odcInstallation: 'dp-check'
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --format HTML -o /path/to/html/report', odcInstallation: 'dp-check'
                 // Specify the path where you want to save the HTML report
                 publishHTML(target: [
                      allowMissing: false,
