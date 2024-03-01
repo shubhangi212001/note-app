@@ -1,9 +1,26 @@
 pipeline {
     agent any
-    stages{
+    tools{
+        jdk 'jdk'
+    }
+    environment {
+        SCANNER_HOME=tool 'sonar-server'
+    }
+    stages {
+        stage('Workspace Cleaning'){
+            steps{
+                cleanWs()
+            }
+        }  
         stage("Clone Code"){
             steps{
                 git url: "https://github.com/LondheShubham153/django-notes-app.git", branch: "main"
+            }
+        }
+        stage('OWASP DP SCAN') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'dp-check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
         stage("Build and Test"){
