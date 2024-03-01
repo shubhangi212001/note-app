@@ -19,8 +19,16 @@ pipeline {
         }
         stage('OWASP DP SCAN') {
             steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'dp-check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --format HTML --output-format HTML --output /path/to/html/report', odcInstallation: 'dp-check'
+                // Specify the path where you want to save the HTML report
+                publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: '/path/to/html/report',
+                    reportFiles: 'index.html',
+                    reportName: 'OWASP Dependency-Check HTML Report'
+                ])
             }
         }
         stage('TRIVY FS SCAN') {
