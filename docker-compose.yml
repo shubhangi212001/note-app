@@ -3,4 +3,4 @@ services :
   web :
      image : shubhangihshinde/my-note-app:latest
      ports :
-         - "8002:8000"
+         - "8002:8002"
