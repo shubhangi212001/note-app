@@ -31,7 +31,7 @@ pipeline {
                     def outputFile = 'https://github.com/shubhangi212001/note-app/blob/main/dependency-check-report.html'
 
                     // Execute the command to convert XML to HTML
-                    sh "xsltproc --output ${outputFile} stylesheet.xsl ${inputFile}"
+                    sh "xsltproc --output ${outputFile} ${inputFile}"
 
                     // Check if conversion was successful
                     if (fileExists(outputFile)) {
