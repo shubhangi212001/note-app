@@ -27,8 +27,8 @@ pipeline {
             steps {
                 script {
                     // Define input and output file paths
-                    def inputFile = 'path/to/input.xml'
-                    def outputFile = 'path/to/output.html'
+                    def inputFile = 'https://github.com/shubhangi212001/note-app/blob/main/dependency-check-report.xml'
+                    def outputFile = 'https://github.com/shubhangi212001/note-app/blob/main/dependency-check-report.html'
 
                     // Execute the command to convert XML to HTML
                     sh "xsltproc --output ${outputFile} stylesheet.xsl ${inputFile}"
