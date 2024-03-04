@@ -14,7 +14,7 @@ pipeline {
         }  
         stage("Clone Code"){
             steps{
-                git url: "https://github.com/LondheShubham153/django-notes-app.git", branch: "main"
+                git url: "https://github.com/shubhangi212001/note-app.git", branch: "dev"
             }
         }
         stage('OWASP DP SCAN') {
@@ -25,16 +25,16 @@ pipeline {
         }
         stage("Build and Test"){
             steps{
-                sh "docker build . -t note-app-test-new"
+                sh "docker build . -t note-app"
             }
         }
         stage('Push') {
             steps {
                 echo 'Pushing docker image on Docker Hub'
                 withCredentials([usernamePassword(credentialsId: 'DOCKERHUB', passwordVariable: 'dockerHubpass', usernameVariable: 'dockerHubuser')]) {
-                    sh "docker tag my-note-app ${env.dockerHubuser}/my-note-app:latest"
+                    sh "docker tag note-app ${env.dockerHubuser}/note-app:latest"
                     sh "docker login -u ${env.dockerHubuser} -p ${env.dockerHubpass}"
-                    sh "docker push ${env.dockerHubuser}/my-note-app:latest"
+                    sh "docker push ${env.dockerHubuser}/note-app:latest"
                 }
             }
         }
