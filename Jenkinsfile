@@ -23,6 +23,26 @@ pipeline {
                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
            }
        }
+        stage('Convert XML to HTML') {
+            steps {
+                script {
+                    // Define input and output file paths
+                    def inputFile = 'path/to/input.xml'
+                    def outputFile = 'path/to/output.html'
+
+                    // Execute the command to convert XML to HTML
+                    sh "xsltproc --output ${outputFile} stylesheet.xsl ${inputFile}"
+
+                    // Check if conversion was successful
+                    if (fileExists(outputFile)) {
+                        echo "XML file converted to HTML successfully"
+                    } else {
+                        error "Conversion failed. HTML file not generated."
+                    }
+                }
+            }
+        }
+
         stage('TRIVY FS SCAN') {
             steps {
                 sh "trivy fs . > trivyfs.txt"
