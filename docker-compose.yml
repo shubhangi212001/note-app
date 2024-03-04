@@ -1,6 +1,6 @@
 version : "3.3"
 services :
   web :
-     image : shubhangihshinde/my-note-app:latest
+     image : shubhangihshinde/note-app:latest
      ports :
          - "8002:8002"
