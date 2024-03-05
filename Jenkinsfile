@@ -30,6 +30,16 @@ pipeline {
                     def inputFile = 'https://github.com/shubhangi212001/note-app/blob/main/dependency-check-report.xml'
                     def outputFile = 'https://github.com/shubhangi212001/note-app/blob/main/dependency-check-report.html'
 
+                    // Fetch the XML file from GitHub using credentials
+                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "curl -u $USERNAME:$PASSWORD -LJO https://raw.githubusercontent.com/shubhangi212001/note-app/main/dependency-check-report.xml"
+                    }
+
+                    // Check if XML file exists
+                    if (!fileExists(inputFile)) {
+                        error "Failed to fetch XML file from GitHub"
+                    }
+                    
                     // Execute the command to convert XML to HTML
                     sh "xsltproc --output ${outputFile} ${inputFile}"
 
