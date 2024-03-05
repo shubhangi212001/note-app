@@ -7,8 +7,8 @@ pipeline {
         SCANNER_HOME=tool 'sonar-server'
     }
      environment {
-        GITHUB_USERNAME = credentials('github-credentials').USERNAME
-        GITHUB_PASSWORD = credentials('github-credentials').PASSWORD
+        GITHUB_USERNAME = credentials('github-credentials').username
+        GITHUB_PASSWORD = credentials('github-credentials').password
     }
     stages {
         stage('Workspace Cleaning'){
@@ -35,8 +35,8 @@ pipeline {
                     def outputFile = 'https://github.com/shubhangi212001/note-app/blob/main/dependency-check-report.html'
 
                     // Fetch the XML file from GitHub using credentials
-                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "curl -u $USERNAME:$PASSWORD -LJO https://raw.githubusercontent.com/shubhangi212001/note-app/main/dependency-check-report.xml"
+                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
+                        sh "curl -u $GITHUB_USERNAME:$GITHUB_PASSWORD -LJO https://raw.githubusercontent.com/shubhangi212001/note-app/main/dependency-check-report.xml"
                     }
 
                     // Check if XML file exists
