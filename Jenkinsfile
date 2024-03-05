@@ -7,8 +7,8 @@ pipeline {
         SCANNER_HOME=tool 'sonar-server'
     }
      environment {
-        GITHUB_USERNAME = credentials('github-credentials').username
-        GITHUB_PASSWORD = credentials('github-credentials').password
+        GITHUB_USERNAME = 'credentials('github-credentials').username'
+        GITHUB_PASSWORD = 'credentials('github-credentials').password'
     }
     stages {
         stage('Workspace Cleaning'){
