@@ -5,8 +5,6 @@ pipeline {
     }
     environment {
         SCANNER_HOME=tool 'sonar-server'
-    }
-     environment {
         GITHUB_CREDENTIALS = credentials('github-credentials')
         GITHUB_USERNAME = 'github-credentials.username'
         GITHUB_PASSWORD = 'github-credentials.password'
