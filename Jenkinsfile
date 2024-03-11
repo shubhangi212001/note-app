@@ -26,36 +26,6 @@ pipeline {
                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
            }
        }
-        stage('Convert XML to HTML') {
-            steps {
-                script {
-                    // Define input and output file paths
-                    def inputFile = 'https://github.com/shubhangi212001/note-app/blob/main/dependency-check-report.xml'
-                    def outputFile = 'https://github.com/shubhangi212001/note-app/blob/main/dependency-check-report.html'
-
-                    // Fetch the XML file from GitHub using credentials
-                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
-                        sh "curl -u $GITHUB_USERNAME:$GITHUB_PASSWORD -LJO https://raw.githubusercontent.com/shubhangi212001/note-app/main/dependency-check-report.xml"
-                    }
-
-                    // Check if XML file exists
-                    if (!fileExists(inputFile)) {
-                        error "Failed to fetch XML file from GitHub"
-                    }
-                    
-                    // Execute the command to convert XML to HTML
-                    sh "xsltproc --output ${outputFile} ${inputFile}"
-
-                    // Check if conversion was successful
-                    if (fileExists(outputFile)) {
-                        echo "XML file converted to HTML successfully"
-                    } else {
-                        error "Conversion failed. HTML file not generated."
-                    }
-                }
-            }
-        }
-
         stage('TRIVY FS SCAN') {
             steps {
                 sh "trivy fs . > trivyfs.txt"
